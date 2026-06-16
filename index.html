@@ -816,6 +816,195 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 .hdw-guests-col.gd-open svg { transform:rotate(180deg); }
 .hdw-guests-col svg { transition:transform .22s ease; }
 
+
+/* ═══════════ ZAREZERWUJ — universal brown → beige button ═══════════ */
+.btn-rezerwuj {
+  font-family:'DM Sans',sans-serif;
+  font-size:var(--t-nav); font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase;
+  background:var(--bark); color:var(--parchment) !important;
+  border:1px solid var(--bark); text-decoration:none;
+  padding:11px 22px; display:inline-flex; align-items:center; gap:8px;
+  cursor:pointer; white-space:nowrap;
+  transition:background .25s,color .25s,border-color .25s;
+}
+.btn-rezerwuj:hover {
+  background:var(--parchment); color:var(--bark) !important;
+  border-color:var(--bark);
+}
+/* nav-cta overrides stripped — btn-rezerwuj takes precedence */
+nav.solid .nav-cta.btn-rezerwuj { background:var(--bark); color:var(--parchment) !important; border-color:var(--bark); }
+nav.solid .nav-cta.btn-rezerwuj:hover { background:var(--parchment); color:var(--bark) !important; }
+nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-color:rgba(60,49,33,.9); backdrop-filter:blur(4px); }
+/* room-bar adjustment — espresso bg so bark button contrasts */
+.room-bar { background:var(--espresso) !important; display:flex; align-items:center; justify-content:center; }
+.room-bar-link.btn-rezerwuj { width:100%; justify-content:center; padding:13px 20px; }
+/* mob-cta override */
+.mob-cta.btn-rezerwuj { font-size:17px !important; opacity:1 !important; }
+
+/* ═══════════ FOOTER MOBILE CTA ═══════════ */
+.ft-mobile-cta { display:none; }
+@media(max-width:900px) {
+  .ft-mobile-cta { display:flex; justify-content:center; padding:36px var(--g) 0; }
+  .ft-mobile-cta .btn-rezerwuj { padding:15px 40px; font-size:16px; }
+}
+
+/* ═══════════ BOOKING MODAL ═══════════ */
+.book-modal {
+  position:fixed; inset:0; z-index:9000;
+  display:flex; flex-direction:column;
+  background:var(--parchment);
+  opacity:0; pointer-events:none;
+  transition:opacity .32s ease;
+  will-change:opacity;
+}
+.book-modal.is-open { opacity:1; pointer-events:all; }
+.bm-nav {
+  height:64px; flex-shrink:0;
+  background:rgba(246,241,234,.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--smid); box-shadow:0 2px 20px rgba(38,22,10,.06);
+  position:relative; z-index:1;
+}
+.bm-nav-inner {
+  max-width:var(--max); margin:0 auto; padding:0 var(--g); height:100%;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+}
+.bm-logo-link {
+  font-family:'Cormorant Garamond',serif; font-size:clamp(16px,1.6vw,20px);
+  font-weight:400; letter-spacing:.08em; color:var(--bark); text-decoration:none; opacity:.9;
+  flex-shrink:0;
+}
+.bm-url-hint {
+  font-family:'DM Sans',sans-serif; font-size:12px; letter-spacing:.1em;
+  color:var(--bark); opacity:.35; white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis; flex:1; text-align:center;
+}
+@media(max-width:540px){ .bm-url-hint { display:none; } }
+.bm-close {
+  background:none; border:none; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; gap:8px;
+  font-family:'DM Sans',sans-serif; font-size:var(--t-min);
+  letter-spacing:.14em; text-transform:uppercase; color:var(--bark);
+  padding:8px 0; transition:opacity .2s;
+}
+.bm-close:hover { opacity:.55; }
+.bm-close svg { transition:transform .25s; }
+.bm-close:hover svg { transform:rotate(90deg); }
+.bm-iframe-wrap { flex:1; min-height:0; overflow:hidden; position:relative; }
+.book-iframe { width:100%; height:100%; border:none; display:block; background:var(--off); }
+.bm-footer {
+  background:var(--espresso); padding:12px var(--g); flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.bm-ft-copy { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--sand); opacity:.32; letter-spacing:.04em; }
+.bm-ft-links { display:flex; gap:16px; list-style:none; }
+.bm-ft-links a { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--sand); opacity:.32; text-decoration:none; transition:opacity .2s; }
+.bm-ft-links a:hover { opacity:.7; }
+
+/* ═══════════ COOKIE BANNER — EU 2026 ═══════════ */
+.cookie-banner {
+  position:fixed; bottom:24px; left:50%;
+  transform:translateX(-50%) translateY(16px);
+  width:min(800px,calc(100vw - 24px));
+  background:var(--espresso); border:1px solid rgba(205,192,177,.15);
+  z-index:8500; padding:28px 32px;
+  box-shadow:0 20px 70px rgba(0,0,0,.55),0 0 0 1px rgba(205,192,177,.05);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease,transform .4s ease;
+}
+.cookie-banner.is-visible { opacity:1; transform:translateX(-50%) translateY(0); pointer-events:all; }
+@media(max-width:600px) {
+  .cookie-banner { bottom:0; left:0; right:0; width:100%; transform:translateY(16px);
+    border-bottom:none; border-left:none; border-right:none; padding:20px 18px; }
+  .cookie-banner.is-visible { transform:translateY(0); }
+}
+.cb-row { display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; }
+.cb-copy { flex:1; min-width:220px; }
+.cb-title { font-family:'Cormorant Garamond',serif; font-size:clamp(18px,1.8vw,24px); font-weight:400; color:var(--parchment); margin-bottom:8px; line-height:1.2; }
+.cb-text { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:300; color:var(--sand); opacity:.58; line-height:1.72; }
+.cb-text a { color:var(--sand); opacity:.85; text-decoration:underline; text-underline-offset:3px; }
+.cb-actions { display:flex; flex-direction:column; gap:10px; flex-shrink:0; min-width:190px; justify-content:center; }
+.cb-btn-accept {
+  font-family:'DM Sans',sans-serif; font-size:var(--t-min); font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase;
+  background:var(--parchment); color:var(--espresso); border:1px solid var(--parchment);
+  padding:12px 20px; cursor:pointer; transition:background .2s; white-space:nowrap;
+}
+.cb-btn-accept:hover { background:var(--sand); border-color:var(--sand); }
+.cb-btn-necessary {
+  font-family:'DM Sans',sans-serif; font-size:var(--t-min); font-weight:400;
+  letter-spacing:.14em; text-transform:uppercase;
+  background:transparent; color:var(--sand); border:1px solid rgba(205,192,177,.28);
+  padding:12px 20px; cursor:pointer; transition:border-color .2s,color .2s; white-space:nowrap;
+}
+.cb-btn-necessary:hover { border-color:var(--sand); color:var(--parchment); }
+.cb-btn-settings {
+  font-family:'DM Sans',sans-serif; font-size:12px; font-weight:300;
+  letter-spacing:.08em; text-transform:uppercase;
+  background:none; color:var(--sand); border:none;
+  border-bottom:1px solid rgba(205,192,177,.25); padding-bottom:2px;
+  cursor:pointer; text-align:center; transition:color .2s,border-color .2s;
+}
+.cb-btn-settings:hover { color:var(--parchment); border-color:rgba(205,192,177,.65); }
+/* Cookie prefs overlay */
+.cb-prefs-overlay {
+  position:fixed; inset:0; z-index:9200;
+  background:rgba(19,18,16,.75); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center; padding:16px;
+  opacity:0; pointer-events:none; transition:opacity .3s;
+}
+.cb-prefs-overlay.is-open { opacity:1; pointer-events:all; }
+.cb-prefs-box {
+  background:var(--espresso); border:1px solid rgba(205,192,177,.15);
+  max-width:540px; width:100%; max-height:85vh; overflow-y:auto;
+  padding:36px; box-shadow:0 28px 90px rgba(0,0,0,.65);
+  scrollbar-width:thin; scrollbar-color:rgba(205,192,177,.15) transparent;
+}
+.cb-prefs-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,2.5vw,30px); font-weight:300; color:var(--parchment); margin-bottom:22px; }
+.cb-pref-item { border-top:1px solid rgba(205,192,177,.09); padding:18px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:24px; }
+.cb-pref-info { flex:1; }
+.cb-pref-label { font-family:'DM Sans',sans-serif; font-size:var(--t-min); letter-spacing:.12em; text-transform:uppercase; font-weight:500; color:var(--parchment); margin-bottom:5px; }
+.cb-pref-desc { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:300; color:var(--sand); opacity:.48; line-height:1.65; }
+.cb-toggle { position:relative; width:46px; height:26px; flex-shrink:0; margin-top:2px; }
+.cb-toggle input { position:absolute; opacity:0; width:0; height:0; }
+.cb-toggle-track { position:absolute; inset:0; background:rgba(205,192,177,.16); border-radius:13px; cursor:pointer; transition:background .2s; border:1px solid rgba(205,192,177,.14); }
+.cb-toggle-thumb { position:absolute; width:18px; height:18px; left:3px; top:3px; background:var(--sand); border-radius:50%; transition:transform .22s,background .22s; pointer-events:none; }
+.cb-toggle input:checked ~ .cb-toggle-track { background:var(--bark); border-color:var(--bark); }
+.cb-toggle input:checked ~ .cb-toggle-thumb { transform:translateX(20px); background:var(--parchment); }
+.cb-toggle input:disabled ~ .cb-toggle-track { cursor:default; opacity:.45; }
+.cb-prefs-footer { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; border-top:1px solid rgba(205,192,177,.09); padding-top:24px; }
+
+/* ═══════════ MOBILE: floating hamburger ═══════════ */
+@media(max-width:900px) {
+  .nav-burger {
+    position:fixed !important; bottom:24px !important; right:20px !important;
+    top:auto !important; z-index:600 !important;
+    background:var(--bark) !important; color:var(--parchment) !important;
+    border-radius:50% !important; width:52px !important; height:52px !important;
+    display:flex !important; align-items:center !important; justify-content:center !important;
+    box-shadow:0 4px 24px rgba(0,0,0,.35),0 0 0 1px rgba(60,49,33,.5) !important;
+    border:none !important; padding:0 !important;
+    transition:background .2s,transform .2s,box-shadow .2s !important;
+  }
+  .nav-burger:hover,
+  .nav-burger[aria-expanded="true"] {
+    background:var(--espresso) !important; transform:scale(1.07) !important;
+    box-shadow:0 6px 32px rgba(0,0,0,.45),0 0 0 1px rgba(60,49,33,.6) !important;
+  }
+}
+
+/* ═══════════ FOOTER: centered on mobile ═══════════ */
+@media(max-width:900px) {
+  .ft-top { text-align:center; }
+  .ft-logo { justify-content:center; display:flex !important; }
+  .ft-tagline { max-width:100%; margin-left:auto; margin-right:auto; }
+  .ft-col-title { text-align:center; }
+  .ft-links { display:flex; flex-direction:column; align-items:center; }
+  .ft-bottom { flex-direction:column; align-items:center; text-align:center; }
+  .ft-legal { justify-content:center; }
+  .ft-contact-col { align-items:center !important; }
+}
+
 </style>
 </head>
 <body>
@@ -831,7 +1020,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
       <li><a href="#vouchers">Vouchery</a></li>
       <li><a href="#contact">Kontakt</a></li>
     </ul>
-    <a class="nav-cta" href="#hero">Zarezerwuj pobyt</a>
+    <a class="nav-cta btn-rezerwuj" href="#" onclick="openBookModal();return false;">Zarezerwuj pobyt</a>
     <button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
     </button>
@@ -840,7 +1029,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 <div class="nav-mobile" id="navMobile">
   <a href="#about">O hotelu</a><a href="#rooms">Pokoje</a>
   <a href="#features">Atrakcje</a><a href="#vouchers">Vouchery</a><a href="#contact">Kontakt</a>
-  <a class="mob-cta" href="#hero">Zarezerwuj pobyt</a>
+  <a class="mob-cta btn-rezerwuj" href="#" onclick="openBookModal();return false;">Zarezerwuj pobyt</a>
 </div>
 
 <!-- HERO -->
@@ -987,7 +1176,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
             <span class="rspec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>1–3 osoby</span>
           </div>
         </div>
-        <div class="room-bar"><a class="room-bar-link" href="#hero">Zarezerwuj <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+        <div class="room-bar"><a class="room-bar-link btn-rezerwuj" href="#" onclick="openBookModal();return false;">Zarezerwuj pobyt</a></div>
       </div>
       <div class="room-card rv d2">
         <div class="rimg"><div class="rimg-inner ri2"><div class="room-leaf-bg"><?xml version="1.0" encoding="utf-8"?>
@@ -1000,7 +1189,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
             <span class="rspec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>1–4 osoby</span>
           </div>
         </div>
-        <div class="room-bar"><a class="room-bar-link" href="#hero">Zarezerwuj <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+        <div class="room-bar"><a class="room-bar-link btn-rezerwuj" href="#" onclick="openBookModal();return false;">Zarezerwuj pobyt</a></div>
       </div>
       <div class="room-card rv d3">
         <div class="rimg"><div class="rimg-inner ri3"><div class="room-leaf-bg"><?xml version="1.0" encoding="utf-8"?>
@@ -1013,7 +1202,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
             <span class="rspec"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>3–5 osób</span>
           </div>
         </div>
-        <div class="room-bar"><a class="room-bar-link" href="#hero">Zarezerwuj <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+        <div class="room-bar"><a class="room-bar-link btn-rezerwuj" href="#" onclick="openBookModal();return false;">Zarezerwuj pobyt</a></div>
       </div>
     </div>
   </div>
@@ -1146,7 +1335,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 </section>
 
 <!-- FOOTER -->
-<footer id="contact">
+<footer id="contact"><div class="ft-mobile-cta"><a class="btn-rezerwuj" href="#" onclick="openBookModal();return false;">Zarezerwuj pobyt</a></div>
   <div class="ft-leaf-bg"><?xml version="1.0" encoding="utf-8"?>
 <svg style="width:100%;height:100%;display:block;" xmlns="http://www.w3.org/2000/svg" viewBox="2.2858 44.5494 492.6943 396.7101" preserveAspectRatio="xMidYMid meet"><path fill="currentColor" d="M 290.266 132.719 C 290.299 132.71 290.332 132.701 290.365 132.692 C 290.345 132.713 290.325 132.733 290.305 132.754 L 290.266 132.719 Z M 290.364 132.692 C 319.006 103.11 385.31 131.864 366 166.156 C 363.746 164.953 361.57 163.617 359.477 162.156 C 357.383 160.691 355.383 159.109 353.481 157.406 C 351.575 155.703 349.778 153.894 348.086 151.976 C 346.399 150.058 344.828 148.05 343.379 145.949 C 348.453 154.859 362.664 177.187 387.852 173.867 C 385.524 168.734 383.559 163.469 381.95 158.066 C 380.341 152.668 379.11 147.179 378.251 141.609 C 355.169 139.214 353.399 114.937 356.849 97.988 C 360.872 78.254 369.79 65.343 350.853 54.582 C 397.177 53.656 427.333 129.227 384.724 141.27 C 383.884 138.528 383.204 135.739 382.697 132.915 C 382.185 130.087 381.845 127.239 381.677 124.372 C 381.505 121.505 381.505 118.638 381.677 115.77 C 381.849 112.903 382.189 110.055 382.7 107.231 C 382.333 108.618 381.997 110.012 381.696 111.415 C 381.395 112.821 381.126 114.231 380.895 115.645 C 380.665 117.063 380.469 118.485 380.309 119.911 C 380.145 121.341 380.02 122.77 379.93 124.2 C 379.84 125.634 379.785 127.067 379.766 128.505 C 379.746 129.939 379.762 131.376 379.813 132.81 C 379.864 134.244 379.95 135.677 380.071 137.107 C 380.192 138.541 380.348 139.966 380.54 141.388 C 380.731 142.81 380.962 144.228 381.224 145.638 C 381.486 147.048 381.783 148.454 382.111 149.853 C 382.443 151.248 382.81 152.634 383.209 154.013 C 383.607 155.396 384.041 156.763 384.51 158.118 C 384.975 159.477 385.475 160.821 386.01 162.153 C 386.545 163.489 387.112 164.805 387.709 166.11 C 388.307 167.415 388.939 168.704 389.6 169.977 C 390.264 171.25 390.955 172.508 391.682 173.75 C 415.026 168.688 419.741 144.469 421.096 135.098 C 420.573 137.36 419.912 139.582 419.123 141.766 C 418.334 143.95 417.42 146.079 416.373 148.153 C 415.33 150.223 414.166 152.231 412.885 154.165 C 411.6 156.099 410.209 157.954 408.705 159.724 C 380.943 137.119 427.545 90.701 461.631 106.24 C 444.131 108.158 446.611 120.599 443.268 136.529 C 440.397 150.232 431.299 167.662 413.409 162.041 C 412.878 162.967 412.307 163.861 411.69 164.732 C 411.073 165.603 410.42 166.439 409.725 167.248 C 409.034 168.057 408.303 168.834 407.534 169.572 C 406.768 170.314 405.968 171.017 405.136 171.681 C 404.304 172.345 403.441 172.97 402.55 173.552 C 401.659 174.138 400.741 174.677 399.8 175.177 C 398.859 175.673 397.894 176.126 396.909 176.532 C 395.925 176.942 394.921 177.302 393.905 177.614 C 396.311 181.637 398.917 185.524 401.725 189.274 C 400.94 190.848 400.291 192.477 399.788 194.161 C 396.038 189.192 392.772 183.923 389.995 178.352 C 388.765 178.504 387.526 178.594 386.288 178.625 C 385.046 178.656 383.808 178.621 382.573 178.527 C 381.335 178.433 380.104 178.277 378.886 178.058 C 377.663 177.843 376.456 177.562 375.261 177.222 C 374.07 176.886 372.894 176.488 371.741 176.031 C 370.589 175.578 369.46 175.062 368.358 174.492 C 367.256 173.926 366.182 173.301 365.143 172.625 C 364.104 171.949 363.1 171.223 362.131 170.445 C 346.072 183.367 329.725 169.199 321.272 156.343 C 311.45 141.397 308.972 127.684 290.367 132.691 L 290.364 132.692 Z" fill-opacity="1" fill-rule="evenodd" id="object-0" transform="matrix(2.8751161098480225, 0, 0, 2.842019081115722, -832.2626225521186, -110.54971157730006)"/></svg></div>
   <div class="wrap">
@@ -1399,7 +1588,7 @@ guestsPlus.addEventListener('click',  () => { if (guests < 5) { guests++; update
   });
 
   var bookBtn=$('hdw-book-btn');
-  if(bookBtn) bookBtn.addEventListener('click',function(){window.location.href='https://zaciszeturawa.pl';});
+  if(bookBtn) bookBtn.addEventListener('click',function(){ var pCount=typeof guests==='number'?guests:2; openBookModal(pad(cin),pad(cout),pCount); });
 
   document.addEventListener('click',function(e){
     if(cal&&cal.classList.contains('is-open')){
@@ -1413,6 +1602,219 @@ guestsPlus.addEventListener('click',  () => { if (guests < 5) { guests++; update
   renderDisplay();
 })();
 
+// ─── CONSENT MANAGEMENT ───
+var CONSENT_KEY = 'zt_consent_v1';
+function getConsent() {
+  try { var r=localStorage.getItem(CONSENT_KEY); return r?JSON.parse(r):null; } catch(e){return null;}
+}
+function saveConsent(analytics, marketing) {
+  var c={version:1,ts:Date.now(),necessary:true,analytics:!!analytics,marketing:!!marketing};
+  try{localStorage.setItem(CONSENT_KEY,JSON.stringify(c));}catch(e){}
+  return c;
+}
+
+// ─── BOOKING MODAL ───
+var BE_BASE = 'https://be.guestsage.com/pl/0bf0dc4c-089f-42f4-8bf0-3ea22a76ad8a';
+var bookModal = document.getElementById('book-modal');
+var bookIframe = document.getElementById('book-iframe');
+var bmClose = document.getElementById('bm-close');
+var _modalOpen = false;
+
+function buildBeUrl(arrivalDate, departureDate, personsCount) {
+  var url = BE_BASE;
+  if (arrivalDate && departureDate) {
+    url += '/offers?arrivalDate=' + arrivalDate + '&departureDate=' + departureDate + '&personsCount=' + (personsCount||2);
+  }
+  var consent = getConsent();
+  var sep = url.indexOf('?') > -1 ? '&' : '?';
+  if (consent && consent.analytics && consent.marketing) {
+    url += sep + 'cookiesAccepted=all&gdprConsent=1&disableGoogleSSO=1';
+  } else {
+    url += sep + 'cookiesAccepted=necessary&disableGoogleSSO=1';
+  }
+  return url;
+}
+
+function openBookModal(arrivalDate, departureDate, personsCount) {
+  if (!bookModal) return;
+  bookIframe.src = buildBeUrl(arrivalDate, departureDate, personsCount);
+  bookModal.removeAttribute('hidden');
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ bookModal.classList.add('is-open'); });
+  });
+  history.pushState({booking:true}, 'Rezerwacja — Zacisze Turawa', '/rezerwuj');
+  document.body.style.overflow = 'hidden';
+  _modalOpen = true;
+  if (bmClose) bmClose.focus();
+}
+
+function closeBookModal() {
+  if (!bookModal || !_modalOpen) return;
+  bookModal.classList.remove('is-open');
+  document.body.style.overflow = '';
+  _modalOpen = false;
+  setTimeout(function(){
+    if (bookModal) { bookModal.setAttribute('hidden',''); bookIframe.src='about:blank'; }
+  }, 360);
+  if (history.state && history.state.booking) history.back();
+}
+
+if (bmClose) bmClose.addEventListener('click', closeBookModal);
+document.addEventListener('keydown', function(e){ if (e.key==='Escape' && _modalOpen) closeBookModal(); });
+window.addEventListener('popstate', function(e){
+  if (_modalOpen) {
+    if (bookModal) bookModal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    _modalOpen = false;
+    setTimeout(function(){
+      if (bookModal){ bookModal.setAttribute('hidden',''); bookIframe.src='about:blank'; }
+    }, 360);
+  }
+});
+if (window.location.pathname === '/rezerwuj') history.replaceState(null, '', '/');
+
+// ─── COOKIE BANNER ───
+(function(){
+  var banner = document.getElementById('cookie-banner');
+  var prefsOverlay = document.getElementById('cb-prefs-overlay');
+  var cbAcceptAll = document.getElementById('cb-accept-all');
+  var cbRejectAll = document.getElementById('cb-reject-all');
+  var cbOpenSettings = document.getElementById('cb-open-settings');
+  var cbSavePrefs = document.getElementById('cb-save-prefs');
+  var cbAcceptAllPrefs = document.getElementById('cb-accept-all-prefs');
+  var cbPrefAnalytics = document.getElementById('cb-pref-analytics');
+  var cbPrefMarketing = document.getElementById('cb-pref-marketing');
+
+  function showBanner() {
+    if (!banner) return;
+    banner.removeAttribute('hidden');
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ banner.classList.add('is-visible'); });
+    });
+  }
+  function hideBanner() {
+    if (!banner) return;
+    banner.classList.remove('is-visible');
+    setTimeout(function(){ if(banner) banner.setAttribute('hidden',''); }, 460);
+  }
+  function openPrefs() {
+    var c = getConsent() || {};
+    if (cbPrefAnalytics) cbPrefAnalytics.checked = !!c.analytics;
+    if (cbPrefMarketing) cbPrefMarketing.checked = !!c.marketing;
+    if (prefsOverlay) prefsOverlay.classList.add('is-open');
+  }
+  function closePrefs() {
+    if (prefsOverlay) prefsOverlay.classList.remove('is-open');
+  }
+
+  if (!getConsent()) showBanner();
+
+  if (cbAcceptAll) cbAcceptAll.addEventListener('click', function(){ saveConsent(true,true); hideBanner(); });
+  if (cbRejectAll) cbRejectAll.addEventListener('click', function(){ saveConsent(false,false); hideBanner(); });
+  if (cbOpenSettings) cbOpenSettings.addEventListener('click', openPrefs);
+  if (cbSavePrefs) cbSavePrefs.addEventListener('click', function(){
+    saveConsent(cbPrefAnalytics?cbPrefAnalytics.checked:false, cbPrefMarketing?cbPrefMarketing.checked:false);
+    hideBanner(); closePrefs();
+  });
+  if (cbAcceptAllPrefs) cbAcceptAllPrefs.addEventListener('click', function(){
+    if(cbPrefAnalytics) cbPrefAnalytics.checked=true;
+    if(cbPrefMarketing) cbPrefMarketing.checked=true;
+    saveConsent(true,true); hideBanner(); closePrefs();
+  });
+  if (prefsOverlay) prefsOverlay.addEventListener('click', function(e){ if(e.target===prefsOverlay) closePrefs(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && prefsOverlay && prefsOverlay.classList.contains('is-open')) closePrefs(); });
+})();
+
+
 </script>
+
+<!-- ═══════════ BOOKING MODAL ═══════════ -->
+<div id="book-modal" class="book-modal" role="dialog" aria-modal="true" aria-label="Rezerwacja online" hidden>
+  <div class="bm-nav">
+    <div class="bm-nav-inner">
+      <a href="/" class="bm-logo-link">Zacisze Turawa</a>
+      <span class="bm-url-hint" aria-hidden="true">zacisznie.pl/rezerwuj</span>
+      <button class="bm-close" id="bm-close" aria-label="Zamknij rezerwację">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        Zamknij
+      </button>
+    </div>
+  </div>
+  <div class="bm-iframe-wrap">
+    <iframe id="book-iframe" class="book-iframe" src="about:blank"
+      title="Rezerwacja online — Hotel Zacisze Turawa"
+      frameborder="0" allow="payment *; fullscreen *"></iframe>
+  </div>
+  <footer class="bm-footer">
+    <span class="bm-ft-copy">© 2026 Hotel Zacisze Turawa &middot; zacisznie.pl</span>
+    <ul class="bm-ft-links">
+      <li><a href="/polityka-prywatnosci">Polityka prywatności</a></li>
+      <li><a href="/regulamin">Regulamin</a></li>
+    </ul>
+  </footer>
+</div>
+
+<!-- ═══════════ COOKIE BANNER — EU 2026 ═══════════ -->
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Ustawienia plików cookie" aria-live="polite" hidden>
+  <div class="cb-row">
+    <div class="cb-copy">
+      <p class="cb-title">Twoja prywatność</p>
+      <p class="cb-text">
+        Używamy plików cookie do zapewnienia prawidłowego działania strony i systemu rezerwacji (niezbędne) oraz — za Twoją zgodą — do analizy ruchu i personalizacji ofert (analityczne i marketingowe). Zgodę możesz wycofać w każdej chwili w ustawieniach.<br>
+        <a href="/polityka-prywatnosci">Polityka prywatności</a>
+      </p>
+    </div>
+    <div class="cb-actions">
+      <button class="cb-btn-accept" id="cb-accept-all">Akceptuj wszystkie</button>
+      <button class="cb-btn-necessary" id="cb-reject-all">Tylko niezbędne</button>
+      <button class="cb-btn-settings" id="cb-open-settings">Dostosuj ustawienia</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ COOKIE PREFERENCES MODAL ═══════════ -->
+<div id="cb-prefs-overlay" class="cb-prefs-overlay" role="dialog" aria-modal="true" aria-label="Szczegółowe ustawienia prywatności">
+  <div class="cb-prefs-box">
+    <p class="cb-prefs-title">Ustawienia prywatności</p>
+    <div class="cb-pref-item">
+      <div class="cb-pref-info">
+        <p class="cb-pref-label">Niezbędne</p>
+        <p class="cb-pref-desc">Wymagane do działania strony, systemu rezerwacji i bezpieczeństwa sesji. Nie można wyłączyć — stanowią podstawę działania serwisu.</p>
+      </div>
+      <label class="cb-toggle" aria-label="Niezbędne — zawsze włączone">
+        <input type="checkbox" checked disabled id="cb-pref-necessary">
+        <div class="cb-toggle-track"></div>
+        <div class="cb-toggle-thumb"></div>
+      </label>
+    </div>
+    <div class="cb-pref-item">
+      <div class="cb-pref-info">
+        <p class="cb-pref-label">Analityczne</p>
+        <p class="cb-pref-desc">Pozwalają mierzyć ruch i rozumieć, jak goście korzystają z rezerwacji. Pomagają nam poprawiać doświadczenia na stronie.</p>
+      </div>
+      <label class="cb-toggle" aria-label="Analityczne">
+        <input type="checkbox" id="cb-pref-analytics">
+        <div class="cb-toggle-track"></div>
+        <div class="cb-toggle-thumb"></div>
+      </label>
+    </div>
+    <div class="cb-pref-item">
+      <div class="cb-pref-info">
+        <p class="cb-pref-label">Marketingowe</p>
+        <p class="cb-pref-desc">Umożliwiają wyświetlanie spersonalizowanych ofert i reklam na innych platformach po odwiedzeniu naszej strony.</p>
+      </div>
+      <label class="cb-toggle" aria-label="Marketingowe">
+        <input type="checkbox" id="cb-pref-marketing">
+        <div class="cb-toggle-track"></div>
+        <div class="cb-toggle-thumb"></div>
+      </label>
+    </div>
+    <div class="cb-prefs-footer">
+      <button class="cb-btn-accept" id="cb-save-prefs">Zapisz wybrane</button>
+      <button class="cb-btn-necessary" id="cb-accept-all-prefs">Akceptuj wszystkie</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
