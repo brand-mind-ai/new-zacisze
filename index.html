@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -30,8 +31,8 @@
   --t-min:  15px;   /* absolute minimum */
 
   /* Layout */
-  --max: 1300px;
-  --g:   clamp(32px,5vw,80px);
+  --max: 1500px;
+  --g:   clamp(16px,2vw,44px);
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
@@ -448,7 +449,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
   .ft-contact-col { grid-column:1/-1; text-align:center; display:flex; flex-direction:column; align-items:center; }
 }
 @media(max-width:540px) {
-  :root { --g:20px; }
+  :root { --g:14px; }
   .bb-inner { grid-template-columns:1fr; }
   .bb-stepper { border-left:none !important; }
   .feat-grid { grid-template-columns:1fr; }
@@ -456,6 +457,365 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
   .ft-top { grid-template-columns:1fr; }
   .ft-brand-col,.ft-contact-col { grid-column:1; }
 }
+
+/* ═══════════ HERO SPLIT LAYOUT ═══════════ */
+.hero-wrap-split {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:end;
+  gap:clamp(32px,5vw,72px);
+  position:relative;
+}
+.hero-left { display:flex; flex-direction:column; }
+
+/* ─── HERO DATE WIDGET ─── */
+.hero-right {
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-end;
+  padding-bottom:0;
+}
+.hero-date-widget {
+  width:100%;
+  max-width:480px;
+  background:rgba(19,18,16,.72);
+  border:1px solid rgba(205,192,177,.14);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  padding:clamp(20px,2.5vw,32px);
+  animation:fadeUp .9s .45s ease both;
+  position:relative;
+  overflow:visible;
+}
+
+/* Labels */
+.hdw-label-row {
+  display:flex;
+  align-items:center;
+  margin-bottom:clamp(14px,2vw,20px);
+}
+.hdw-lbl {
+  font-family:'DM Sans',sans-serif;
+  font-size:var(--t-min);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--sand);
+  opacity:.4;
+  font-weight:400;
+  flex:1;
+}
+.hdw-lbl-guests {
+  font-family:'DM Sans',sans-serif;
+  font-size:var(--t-min);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--sand);
+  opacity:.4;
+  font-weight:400;
+  padding-left:20px;
+  white-space:nowrap;
+}
+
+/* Dates row */
+.hdw-dates-row {
+  display:flex;
+  align-items:center;
+  margin-bottom:clamp(20px,2.5vw,30px);
+  padding-bottom:clamp(20px,2.5vw,30px);
+  border-bottom:1px solid rgba(205,192,177,.12);
+}
+.hdw-date-col {
+  flex:1;
+  cursor:pointer;
+  transition:opacity .2s;
+}
+.hdw-date-col:hover { opacity:.8; }
+.hdw-day {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(52px,5.5vw,76px);
+  font-weight:300;
+  color:var(--parchment);
+  line-height:.95;
+  margin-bottom:6px;
+  transition:color .2s;
+}
+.hdw-date-col:hover .hdw-day { color:var(--sand); }
+.hdw-month-lbl {
+  font-family:'DM Sans',sans-serif;
+  font-size:var(--t-min);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--sand);
+  opacity:.5;
+  font-weight:300;
+}
+
+/* Arrow */
+.hdw-arrow {
+  padding:0 clamp(10px,1.5vw,20px);
+  color:var(--sand);
+  opacity:.3;
+  font-size:22px;
+  flex-shrink:0;
+  animation:hdwArrowFloat 2.6s ease-in-out infinite;
+}
+@keyframes hdwArrowFloat {
+  0%,100%{transform:translateX(0);opacity:.3}
+  50%{transform:translateX(5px);opacity:.5}
+}
+
+/* Vertical separator */
+.hdw-vsep {
+  width:1px;
+  height:56px;
+  background:rgba(205,192,177,.16);
+  flex-shrink:0;
+  margin:0 clamp(12px,1.5vw,20px);
+}
+
+/* Guests */
+.hdw-guests-col {
+  display:flex;
+  flex-direction:column;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.hdw-guests-val {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,3.5vw,48px);
+  font-weight:300;
+  color:var(--parchment);
+  line-height:.95;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:opacity .2s;
+}
+.hdw-guests-col:hover .hdw-guests-val { opacity:.8; }
+.hdw-guests-val svg { opacity:.45; flex-shrink:0; margin-top:6px; }
+.hdw-guests-unit {
+  font-family:'DM Sans',sans-serif;
+  font-size:var(--t-min);
+  letter-spacing:.1em;
+  color:var(--sand);
+  opacity:.45;
+  margin-left:2px;
+  align-self:flex-end;
+  padding-bottom:4px;
+}
+
+/* Hidden date inputs */
+.hdw-hidden-input {
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+  width:0;
+  height:0;
+}
+
+/* ── REZERWUJ BUTTON ── */
+.hdw-btn {
+  width:100%;
+  background:var(--sand);
+  color:var(--espresso);
+  font-family:'DM Sans',sans-serif;
+  font-size:var(--t-cta);
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  border:none;
+  padding:clamp(16px,2vw,22px) 32px;
+  margin-top:clamp(16px,2vw,24px);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  position:relative;
+  transition:background .38s ease, color .38s ease, box-shadow .45s ease;
+  animation:hdwBtnGlow 3s ease-in-out infinite;
+}
+@keyframes hdwBtnGlow {
+  0%,100%{box-shadow:0 0 8px rgba(205,192,177,.06)}
+  50%{box-shadow:0 0 32px rgba(205,192,177,.55),0 0 70px rgba(205,192,177,.22),0 0 110px rgba(205,192,177,.08)}
+}
+.hdw-btn:hover {
+  background:var(--bark);
+  color:var(--parchment);
+  box-shadow:0 0 40px rgba(60,49,33,.65),0 0 80px rgba(60,49,33,.3),0 0 120px rgba(60,49,33,.12);
+  animation:none;
+}
+.hdw-btn svg { transition:transform .25s ease; flex-shrink:0; }
+.hdw-btn:hover svg { transform:translateX(7px); }
+
+/* Responsive: stack on tablet/mobile */
+@media(max-width:900px){
+  .hero-wrap-split { grid-template-columns:1fr; }
+  .hero-right { justify-content:flex-start; margin-top:clamp(32px,5vw,56px); }
+  .hero-date-widget { max-width:100%; }
+}
+@media(max-width:560px){
+  .hdw-day { font-size:clamp(40px,12vw,60px); }
+  .hdw-guests-val { font-size:clamp(32px,10vw,44px); }
+}
+
+
+/* ═══ CUSTOM CALENDAR ═══ */
+.hdw-cal {
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:0; right:0;
+  z-index:200;
+  background:rgba(13,10,7,.98);
+  border:1px solid rgba(205,192,177,.18);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+  padding:clamp(16px,2vw,24px);
+  display:none;
+  flex-direction:column;
+  box-shadow:0 -12px 48px rgba(0,0,0,.55);
+  animation:hdwCalIn .22s ease;
+}
+.hdw-cal.is-open { display:flex; }
+@keyframes hdwCalIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+.hdw-cal-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:4px;
+}
+.hdw-cal-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(17px,1.8vw,22px);
+  font-weight:400;
+  color:var(--parchment);
+  letter-spacing:.04em;
+  text-align:center;
+  flex:1;
+}
+.hdw-cal-nav {
+  background:none;
+  border:1px solid rgba(205,192,177,.18);
+  color:var(--sand);
+  width:28px; height:28px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  padding:0;
+  flex-shrink:0;
+  transition:border-color .18s, color .18s, background .18s;
+}
+.hdw-cal-nav:hover { border-color:rgba(205,192,177,.5); color:var(--parchment); background:rgba(205,192,177,.06); }
+
+.hdw-cal-hint {
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--sand);
+  opacity:.38;
+  text-align:center;
+  margin:8px 0 14px;
+}
+.hdw-cal-weekdays {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  margin-bottom:4px;
+}
+.hdw-cal-weekdays span {
+  font-family:'DM Sans',sans-serif;
+  font-size:9px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--sand);
+  opacity:.28;
+  text-align:center;
+  padding:2px 0;
+}
+.hdw-cal-grid {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:1px;
+}
+.hdw-cal-day {
+  aspect-ratio:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(10px,1.1vw,13px);
+  font-weight:300;
+  color:var(--sand);
+  opacity:.6;
+  cursor:pointer;
+  transition:background .14s, color .14s, opacity .14s;
+  position:relative;
+}
+.hdw-cal-day:not(.past):not(.other-month):hover { opacity:1; color:var(--parchment); background:rgba(205,192,177,.09); }
+.hdw-cal-day.today { color:var(--parchment); opacity:.9; }
+.hdw-cal-day.today::after { content:''; position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:3px; height:3px; border-radius:50%; background:var(--sand); opacity:.5; }
+.hdw-cal-day.selected-in { background:var(--sand); color:var(--espresso); opacity:1; font-weight:500; }
+.hdw-cal-day.selected-out { background:var(--bark); color:var(--parchment); opacity:1; }
+.hdw-cal-day.in-range { background:rgba(205,192,177,.11); opacity:1; color:var(--parchment); }
+.hdw-cal-day.past { opacity:.15; cursor:default; pointer-events:none; }
+.hdw-cal-day.other-month { opacity:.1; cursor:default; pointer-events:none; }
+
+.hdw-cal-close {
+  position:absolute;
+  top:8px; right:8px;
+  background:none; border:none;
+  color:var(--sand); opacity:.35;
+  cursor:pointer; font-size:14px;
+  line-height:1; padding:4px 6px;
+  transition:opacity .18s;
+}
+.hdw-cal-close:hover { opacity:.75; }
+
+/* ═══ GUEST DROPDOWN ═══ */
+.hdw-guest-dropdown {
+  position:absolute;
+  bottom:calc(100% + 8px);
+  right:0;
+  z-index:201;
+  background:rgba(13,10,7,.98);
+  border:1px solid rgba(205,192,177,.18);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+  min-width:clamp(110px,18%,160px);
+  display:none;
+  flex-direction:column;
+  box-shadow:0 -10px 40px rgba(0,0,0,.5);
+  animation:hdwCalIn .2s ease;
+}
+.hdw-guest-dropdown.is-open { display:flex; }
+.hdw-guest-opt {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,3vw,36px);
+  font-weight:300;
+  color:var(--sand);
+  padding:clamp(8px,.9vw,11px) 0;
+  cursor:pointer;
+  border-bottom:1px solid rgba(205,192,177,.07);
+  text-align:center;
+  transition:background .14s, color .14s;
+  line-height:1.1;
+}
+.hdw-guest-opt:last-child { border-bottom:none; }
+.hdw-guest-opt:hover { background:rgba(205,192,177,.07); color:var(--parchment); }
+.hdw-guest-opt.active { color:var(--parchment); }
+.hdw-guest-more {
+  font-family:'DM Sans',sans-serif;
+  font-size:var(--t-min);
+  letter-spacing:.18em;
+  text-transform:lowercase;
+  padding:clamp(10px,1.1vw,13px) 0;
+  opacity:.5;
+}
+.hdw-guest-more:hover { opacity:1; }
+/* Rotate chevron when guest dropdown open */
+.hdw-guests-col.gd-open svg { transform:rotate(180deg); }
+.hdw-guests-col svg { transition:transform .22s ease; }
+
 </style>
 </head>
 <body>
@@ -496,58 +856,94 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
     </svg>
   </div>
   <div class="hero-content">
-    <div class="wrap">
-      <div class="hero-eyebrow">
-        <div class="hero-eyebrow-line"></div>
-        <span class="hero-eyebrow-text">Opolszczyzna &middot; 150 m od plaży nad Jeziorem Turawskim</span>
+    <div class="wrap hero-wrap-split">
+      <!-- LEFT: hero text -->
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-line"></div>
+          <span class="hero-eyebrow-text">Opolszczyzna &middot; 150 m od plaży nad Jeziorem Turawskim</span>
+        </div>
+        <h1 class="hero-title">Gdzie natura<br/><em>przywraca</em><br/>równowagę</h1>
+        <p class="hero-body">Hotel Zacisze w Turawie — w sercu sosnowego lasu, z basenem, placem zabaw dla dzieci i strefą wellness. Idealne miejsce dla tych, którzy szukają prawdziwego wytchnienia.</p>
+        <div class="hero-actions">
+          <a class="btn-discover" href="#about">
+            Odkryj hotel
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
-      <h1 class="hero-title">Gdzie natura<br/><em>przywraca</em><br/>równowagę</h1>
-      <p class="hero-body">Hotel Zacisze w Turawie — w sercu sosnowego lasu, z basenem, placem zabaw dla dzieci i strefą wellness. Idealne miejsce dla tych, którzy szukają prawdziwego wytchnienia.</p>
-      <div class="hero-actions">
-        <a class="btn-discover" href="#about">
-          Odkryj hotel
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+
+      <!-- RIGHT: date selector widget -->
+      <div class="hero-right">
+        <div class="hero-date-widget">
+          <!-- Column labels -->
+          <div class="hdw-label-row">
+            <span class="hdw-lbl">Przyjazd</span>
+            <span style="flex:0 0 auto;width:clamp(30px,4vw,60px)"></span>
+            <span class="hdw-lbl">Wyjazd</span>
+            <span class="hdw-lbl-guests">Go&#347;cie</span>
+          </div>
+
+          <!-- Dates + guests -->
+          <div class="hdw-dates-row">
+            <div class="hdw-date-col" id="hdw-checkin" role="button" tabindex="0" title="Wybierz datę przyjazdu">
+              <div class="hdw-day" id="hdw-in-day">13</div>
+              <div class="hdw-month-lbl" id="hdw-in-month">Cze</div>
+            </div>
+            <div class="hdw-arrow">&#8594;</div>
+            <div class="hdw-date-col" id="hdw-checkout" role="button" tabindex="0" title="Wybierz datę wyjazdu">
+              <div class="hdw-day" id="hdw-out-day">14</div>
+              <div class="hdw-month-lbl" id="hdw-out-month">Cze</div>
+            </div>
+            <div class="hdw-vsep"></div>
+            <div class="hdw-guests-col" id="hdw-guests-ctrl" role="button" tabindex="0" title="Liczba gości">
+              <div class="hdw-guests-val">
+                <span id="hdw-guests-num">2</span>
+                <span class="hdw-guests-unit">os.</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <button class="hdw-btn" type="button" id="hdw-book-btn">
+            <span class="hdw-btn-text">Rezerwuj</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <!-- CALENDAR OVERLAY (appears above widget) -->
+          <div class="hdw-cal" id="hdw-cal" aria-hidden="true">
+            <button class="hdw-cal-close" id="hdw-cal-close" type="button" aria-label="Zamknij">&#x2715;</button>
+            <div class="hdw-cal-header">
+              <button class="hdw-cal-nav" id="hdw-cal-prev" type="button" aria-label="Poprzedni">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <div class="hdw-cal-title" id="hdw-cal-title"></div>
+              <button class="hdw-cal-nav" id="hdw-cal-next" type="button" aria-label="Następny">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+            <div class="hdw-cal-hint" id="hdw-cal-hint"></div>
+            <div class="hdw-cal-weekdays">
+              <span>Pn</span><span>Wt</span><span>&#346;r</span><span>Cz</span><span>Pt</span><span>Sb</span><span>Nd</span>
+            </div>
+            <div class="hdw-cal-grid" id="hdw-cal-grid"></div>
+          </div>
+
+          <!-- GUEST DROPDOWN (appears above widget, right-aligned) -->
+          <div class="hdw-guest-dropdown" id="hdw-guest-dropdown" aria-hidden="true">
+            <div class="hdw-guest-opt" data-val="1">1</div>
+            <div class="hdw-guest-opt" data-val="2">2</div>
+            <div class="hdw-guest-opt" data-val="3">3</div>
+            <div class="hdw-guest-opt" data-val="4">4</div>
+            <div class="hdw-guest-opt hdw-guest-more" data-val="wiecej">wi&#281;cej</div>
+          </div>
+        </div>
       </div>
-      <div class="hero-scroll">
-        <div class="hero-scroll-bar"></div>
-        <span class="hero-scroll-lbl">Scroll</span>
-      </div>
+
+
     </div>
   </div>
 
-  <!-- BOOKING BAR -->
-  <div class="booking-bar" id="booking-bar">
-    <div class="bb-inner">
-      <div class="bb-label">
-        <div class="bb-label-pre">Zarezerwuj bezpośrednio</div>
-        <div class="bb-label-hl">Znajdź idealny<br/>termin</div>
-      </div>
-      <!-- NOCLEGI stepper -->
-      <div class="bb-stepper">
-        <div class="bb-stepper-l">Noclegi</div>
-        <div class="bb-stepper-ctrl">
-          <button class="step-btn" id="nights-minus" type="button" aria-label="Mniej nocy">&#8722;</button>
-          <div class="step-num" id="nights-val">2</div>
-          <button class="step-btn" id="nights-plus" type="button" aria-label="Więcej nocy">&#43;</button>
-        </div>
-      </div>
-      <!-- GOŚCIE stepper -->
-      <div class="bb-stepper">
-        <div class="bb-stepper-l">Go&#347;cie</div>
-        <div class="bb-stepper-ctrl">
-          <button class="step-btn" id="guests-minus" type="button" aria-label="Mniej gości">&#8722;</button>
-          <div class="step-num" id="guests-val">2</div>
-          <button class="step-btn" id="guests-plus" type="button" aria-label="Więcej gości">&#43;</button>
-        </div>
-      </div>
-      <!-- SPRAWDŹ button -->
-      <button class="bb-submit" type="button">
-        Sprawdź dostępność
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
 </section>
 
 <!-- ABOUT -->
@@ -868,6 +1264,155 @@ function updateGuests() {
 updateGuests();
 guestsMinus.addEventListener('click', () => { if (guests > 1) { guests--; updateGuests(); } });
 guestsPlus.addEventListener('click',  () => { if (guests < 5) { guests++; updateGuests(); } });
+
+/* ── Hero Date Widget ── */
+(function(){
+  var PL_MONTHS=['Styń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Paź','Listopad','Grudzień'];
+  var PL_SHORT=['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru'];
+
+  var today=new Date(); today.setHours(0,0,0,0);
+  var cin=new Date(today); cin.setDate(cin.getDate()+1);
+  var cout=new Date(today); cout.setDate(cout.getDate()+2);
+  var guests=2;
+  var calMode=null;
+  var calYear=cin.getFullYear();
+  var calMonth=cin.getMonth();
+
+  function $(id){return document.getElementById(id);}
+  var inDay=$('hdw-in-day'), inMon=$('hdw-in-month');
+  var outDay=$('hdw-out-day'), outMon=$('hdw-out-month');
+  var gNum=$('hdw-guests-num');
+  var cal=$('hdw-cal'), calTitle=$('hdw-cal-title'), calHint=$('hdw-cal-hint'), calGrid=$('hdw-cal-grid');
+  var calPrev=$('hdw-cal-prev'), calNext=$('hdw-cal-next'), calClose=$('hdw-cal-close');
+  var gDrop=$('hdw-guest-dropdown');
+  var gCtrl=$('hdw-guests-ctrl');
+
+  function pad(d){
+    var y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+    return y+'-'+m+'-'+dd;
+  }
+
+  function renderDisplay(){
+    if(inDay) inDay.textContent=cin.getDate();
+    if(inMon) inMon.textContent=PL_SHORT[cin.getMonth()];
+    if(outDay) outDay.textContent=cout.getDate();
+    if(outMon) outMon.textContent=PL_SHORT[cout.getMonth()];
+    if(gNum) gNum.textContent=guests;
+  }
+
+  function renderCal(){
+    if(!calTitle||!calGrid) return;
+    calTitle.textContent=PL_MONTHS[calMonth]+' '+calYear;
+    if(calHint) calHint.textContent=calMode==='in'?'Wybierz datę przyjazdu':'Wybierz datę wyjazdu';
+    calGrid.innerHTML='';
+
+    var first=new Date(calYear,calMonth,1).getDay();
+    var offset=first===0?6:first-1;
+    var daysIn=new Date(calYear,calMonth+1,0).getDate();
+    var daysPrev=new Date(calYear,calMonth,0).getDate();
+    var cinS=pad(cin), coutS=pad(cout), todayS=pad(today);
+
+    for(var i=offset-1;i>=0;i--){
+      var el=document.createElement('div');
+      el.className='hdw-cal-day other-month';
+      el.textContent=daysPrev-i;
+      calGrid.appendChild(el);
+    }
+    for(var d=1;d<=daysIn;d++){
+      var dt=new Date(calYear,calMonth,d); dt.setHours(0,0,0,0);
+      var ds=pad(dt);
+      var el=document.createElement('div');
+      el.className='hdw-cal-day';
+      el.textContent=d;
+      if(ds===todayS) el.classList.add('today');
+      if(dt<today)   el.classList.add('past');
+      if(ds===cinS)  el.classList.add('selected-in');
+      if(ds===coutS) el.classList.add('selected-out');
+      if(dt>cin&&dt<cout) el.classList.add('in-range');
+      ;(function(dateCopy){
+        el.addEventListener('click',function(){
+          if(dateCopy<today) return;
+          if(calMode==='in'){
+            cin=dateCopy;
+            if(cout<=cin){cout=new Date(cin);cout.setDate(cout.getDate()+1);}
+            calMode='out'; renderCal();
+          } else {
+            if(dateCopy<=cin) return;
+            cout=dateCopy; closeCal();
+          }
+          renderDisplay();
+        });
+      })(dt);
+      calGrid.appendChild(el);
+    }
+    var total=offset+daysIn;
+    var rem=total%7===0?0:7-(total%7);
+    for(var j=1;j<=rem;j++){
+      var el=document.createElement('div');
+      el.className='hdw-cal-day other-month';
+      el.textContent=j;
+      calGrid.appendChild(el);
+    }
+  }
+
+  function openCal(mode){
+    calMode=mode;
+    calYear=(mode==='in'?cin:cout).getFullYear();
+    calMonth=(mode==='in'?cin:cout).getMonth();
+    renderCal();
+    if(cal){cal.classList.add('is-open');cal.setAttribute('aria-hidden','false');}
+    closeGuestDrop();
+  }
+  function closeCal(){
+    if(cal){cal.classList.remove('is-open');cal.setAttribute('aria-hidden','true');}
+    calMode=null;
+  }
+  function openGuestDrop(){
+    if(gDrop){gDrop.classList.add('is-open');gDrop.setAttribute('aria-hidden','false');}
+    if(gCtrl) gCtrl.classList.add('gd-open');
+    closeCal();
+  }
+  function closeGuestDrop(){
+    if(gDrop){gDrop.classList.remove('is-open');gDrop.setAttribute('aria-hidden','true');}
+    if(gCtrl) gCtrl.classList.remove('gd-open');
+  }
+
+  if(calPrev) calPrev.addEventListener('click',function(e){e.stopPropagation();calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCal();});
+  if(calNext) calNext.addEventListener('click',function(e){e.stopPropagation();calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCal();});
+  if(calClose) calClose.addEventListener('click',function(e){e.stopPropagation();closeCal();});
+
+  var ciBtn=$('hdw-checkin'), coBtn=$('hdw-checkout');
+  if(ciBtn) ciBtn.addEventListener('click',function(){openCal('in');});
+  if(coBtn) coBtn.addEventListener('click',function(){openCal('out');});
+  if(gCtrl) gCtrl.addEventListener('click',function(e){e.stopPropagation();gDrop&&gDrop.classList.contains('is-open')?closeGuestDrop():openGuestDrop();});
+
+  document.querySelectorAll('.hdw-guest-opt').forEach(function(opt){
+    opt.addEventListener('click',function(e){
+      e.stopPropagation();
+      var v=this.dataset.val;
+      guests=(v==='wiecej')?'5+':parseInt(v);
+      document.querySelectorAll('.hdw-guest-opt').forEach(function(o){o.classList.remove('active');});
+      this.classList.add('active');
+      if(gNum) gNum.textContent=guests;
+      closeGuestDrop();
+    });
+  });
+
+  var bookBtn=$('hdw-book-btn');
+  if(bookBtn) bookBtn.addEventListener('click',function(){window.location.href='https://zaciszeturawa.pl';});
+
+  document.addEventListener('click',function(e){
+    if(cal&&cal.classList.contains('is-open')){
+      if(!cal.contains(e.target)&&(!ciBtn||!ciBtn.contains(e.target))&&(!coBtn||!coBtn.contains(e.target))){closeCal();}
+    }
+    if(gDrop&&gDrop.classList.contains('is-open')){
+      if(!gDrop.contains(e.target)&&(!gCtrl||!gCtrl.contains(e.target))){closeGuestDrop();}
+    }
+  });
+
+  renderDisplay();
+})();
+
 </script>
 </body>
 </html>
