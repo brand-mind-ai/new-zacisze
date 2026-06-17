@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -1006,29 +1005,52 @@ nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-co
 }
 
 
-/* ═══ V12: Mobile nav — non-sticky, logo at top ═══ */
+/* ═══ V12: Mobile nav — slim sticky logo bar + hamburger top-right ═══ */
 @media(max-width:900px) {
+  /* Slim sticky bar: logo only, 54px tall */
   nav#nav {
-    position: static !important;
-    height: auto !important;
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    height: 54px !important;
     background: var(--espresso) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border-bottom: none !important;
     box-shadow: none !important;
+    z-index: 500 !important;
+    transition: opacity .25s ease !important;
   }
   nav#nav .nav-inner {
-    height: 60px !important;
+    height: 54px !important;
     padding: 0 var(--g) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
   }
-  nav#nav.solid,
-  nav#nav.scrolled {
-    background: var(--espresso) !important;
-    border-bottom: none !important;
+  /* Hamburger: top-right, inline with logo, no pill/circle style */
+  .nav-burger {
+    position: relative !important;
+    top: auto !important; bottom: auto !important;
+    right: auto !important; left: auto !important;
+    background: transparent !important;
+    color: var(--parchment) !important;
+    border-radius: 0 !important;
+    width: 40px !important; height: 40px !important;
     box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
-  .hero-content {
-    padding-top: 40px !important;
+  .nav-burger:hover { background: transparent !important; transform: none !important; }
+  /* Hero padding for 54px sticky nav */
+  .hero-content { padding-top: 90px !important; }
+  /* Hide nav bar when booking modal is open */
+  body.bm-open nav#nav {
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 }
 
@@ -1586,35 +1608,38 @@ window.addEventListener('scroll', () => {
   });
 }, {passive:true});
 
-// ─── NOCLEGI STEPPER (1-7) ───
-let nights = 2;
-const nightsVal   = document.getElementById('nights-val');
-const nightsMinus = document.getElementById('nights-minus');
-const nightsPlus  = document.getElementById('nights-plus');
+// ─── NOCLEGI / GOŚCIE STEPPERS (guarded — elements may not exist) ───
+(function() {
+  let nights = 2;
+  const nightsVal   = document.getElementById('nights-val');
+  const nightsMinus = document.getElementById('nights-minus');
+  const nightsPlus  = document.getElementById('nights-plus');
+  if (nightsVal && nightsMinus && nightsPlus) {
+    function updateNights() {
+      nightsVal.textContent = nights;
+      nightsMinus.disabled = nights <= 1;
+      nightsPlus.disabled  = nights >= 7;
+    }
+    updateNights();
+    nightsMinus.addEventListener('click', () => { if (nights > 1) { nights--; updateNights(); } });
+    nightsPlus.addEventListener('click',  () => { if (nights < 7) { nights++; updateNights(); } });
+  }
 
-function updateNights() {
-  nightsVal.textContent = nights;
-  nightsMinus.disabled = nights <= 1;
-  nightsPlus.disabled  = nights >= 7;
-}
-updateNights();
-nightsMinus.addEventListener('click', () => { if (nights > 1) { nights--; updateNights(); } });
-nightsPlus.addEventListener('click',  () => { if (nights < 7) { nights++; updateNights(); } });
-
-// ─── GOŚCIE STEPPER (1-5) ───
-let guests = 2;
-const guestsVal   = document.getElementById('guests-val');
-const guestsMinus = document.getElementById('guests-minus');
-const guestsPlus  = document.getElementById('guests-plus');
-
-function updateGuests() {
-  guestsVal.textContent = guests;
-  guestsMinus.disabled = guests <= 1;
-  guestsPlus.disabled  = guests >= 5;
-}
-updateGuests();
-guestsMinus.addEventListener('click', () => { if (guests > 1) { guests--; updateGuests(); } });
-guestsPlus.addEventListener('click',  () => { if (guests < 5) { guests++; updateGuests(); } });
+  let guestsS = 2;
+  const guestsVal   = document.getElementById('guests-val');
+  const guestsMinus = document.getElementById('guests-minus');
+  const guestsPlus  = document.getElementById('guests-plus');
+  if (guestsVal && guestsMinus && guestsPlus) {
+    function updateGuests() {
+      guestsVal.textContent = guestsS;
+      guestsMinus.disabled = guestsS <= 1;
+      guestsPlus.disabled  = guestsS >= 5;
+    }
+    updateGuests();
+    guestsMinus.addEventListener('click', () => { if (guestsS > 1) { guestsS--; updateGuests(); } });
+    guestsPlus.addEventListener('click',  () => { if (guestsS < 5) { guestsS++; updateGuests(); } });
+  }
+})();
 
 /* ── Hero Date Widget ── */
 (function(){
@@ -1777,9 +1802,8 @@ function saveConsent(analytics, marketing) {
 
 // ─── BOOKING MODAL ───
 var BE_BASE = 'https://be.guestsage.com/pl/0bf0dc4c-089f-42f4-8bf0-3ea22a76ad8a';
-var bookModal = document.getElementById('book-modal');
-var bookIframe = document.getElementById('book-iframe');
-var bmClose = document.getElementById('bm-close');
+var bookModal = null;
+var bookIframe = null;
 var _modalOpen = false;
 
 function buildBeUrl(arrivalDate, departureDate, personsCount) {
@@ -1798,30 +1822,62 @@ function buildBeUrl(arrivalDate, departureDate, personsCount) {
 }
 
 function openBookModal(arrivalDate, departureDate, personsCount) {
-  if (!bookModal) return;
+  if (!bookModal) bookModal = document.getElementById('book-modal');
+  if (!bookIframe) bookIframe = document.getElementById('book-iframe');
+  if (!bookModal || !bookIframe) return;
   bookIframe.src = buildBeUrl(arrivalDate, departureDate, personsCount);
   bookModal.classList.add('is-open');
+  document.body.classList.add('bm-open');
   history.pushState({booking:true}, 'Rezerwacja — Zacisze Turawa', '/rezerwuj');
   document.body.style.overflow = 'hidden';
   _modalOpen = true;
 }
 
 function closeBookModal() {
+  if (!bookModal) bookModal = document.getElementById('book-modal');
+  if (!bookIframe) bookIframe = document.getElementById('book-iframe');
   if (!bookModal || !_modalOpen) return;
   bookModal.classList.remove('is-open');
+  document.body.classList.remove('bm-open');
   document.body.style.overflow = '';
   _modalOpen = false;
   setTimeout(function(){
-    if (!_modalOpen) { bookIframe.src = 'about:blank'; }
+    if (!_modalOpen && bookIframe) { bookIframe.src = 'about:blank'; }
   }, 300);
   if (history.state && history.state.booking) history.back();
 }
 
-if (bmClose) bmClose.addEventListener('click', closeBookModal);
+document.addEventListener('DOMContentLoaded', function() {
+  bookModal = document.getElementById('book-modal');
+  bookIframe = document.getElementById('book-iframe');
+  var bmClose = document.getElementById('bm-close');
+  if (bmClose) bmClose.addEventListener('click', closeBookModal);
+  if (window.location.pathname === '/rezerwuj') history.replaceState(null, '', '/');
+
+  // ── Clone real footer into modal slot (fix SVG ID conflicts) ──
+  var realFooter = document.getElementById('contact');
+  var slot = document.getElementById('bm-footer-slot');
+  if (realFooter && slot) {
+    var html = realFooter.outerHTML;
+    // Rename clipPath/filter IDs so they don't clash with the original
+    html = html.replace(/\bid="ft_/g, 'id="bm_ft_');
+    html = html.replace(/url\(#ft_/g, 'url(#bm_ft_');
+    html = html.replace(/ id="contact"/g, ' id="bm-footer-clone"');
+    // Remove the nested book-modal-cta duplication guard (ft-mobile-cta stays)
+    slot.innerHTML = html;
+    // Re-bind the ZAREZERWUJ button inside the cloned footer
+    slot.querySelectorAll('.btn-rezerwuj').forEach(function(btn) {
+      btn.onclick = function(e) { e.preventDefault(); openBookModal(); };
+    });
+  }
+});
+
 document.addEventListener('keydown', function(e){ if (e.key==='Escape' && _modalOpen) closeBookModal(); });
 window.addEventListener('popstate', function(e){
   if (_modalOpen) {
+    if (!bookModal) bookModal = document.getElementById('book-modal');
     if (bookModal) bookModal.classList.remove('is-open');
+    document.body.classList.remove('bm-open');
     document.body.style.overflow = '';
     _modalOpen = false;
     setTimeout(function(){
@@ -1829,7 +1885,6 @@ window.addEventListener('popstate', function(e){
     }, 300);
   }
 });
-if (window.location.pathname === '/rezerwuj') history.replaceState(null, '', '/');
 
 // ─── COOKIE BANNER ───
 (function(){
@@ -1896,31 +1951,7 @@ if (window.location.pathname === '/rezerwuj') history.replaceState(null, '', '/'
       title="Rezerwacja online — Hotel Zacisze Turawa"
       frameborder="0" allow="payment *; fullscreen *"></iframe>
   </div>
-  <div class="bm-footer-full">
-    <div class="bm-ft-inner">
-      <div>
-        <p class="bm-ft-brand-name">Zacisze Turawa</p>
-        <p class="bm-ft-tagline">Hotel Wellness w sercu sosnowego lasu,<br>150 m od Jeziora Turawskiego. Gościmy od 2011 roku.</p>
-      </div>
-      <div>
-        <p class="bm-ft-col-title">Kontakt</p>
-        <ul class="bm-ft-links">
-          <li><a href="mailto:biuro@zaciszeturawa.pl">biuro@zaciszeturawa.pl</a></li>
-          <li><a href="tel:+48774028030">774 028 030</a></li>
-          <li><a href="https://maps.app.goo.gl/Hs3CRxqsrkQqQV9s6" target="_blank" rel="noopener">Biwakowa 2, Turawa</a></li>
-          <li><a href="https://maps.app.goo.gl/Hs3CRxqsrkQqQV9s6" target="_blank" rel="noopener">Google Maps &#x2192;</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="bm-ft-bottom">
-      <span class="bm-ft-copy">&copy; 2025 Hotel Zacisze Turawa. Wszelkie prawa zastrzeżone.</span>
-      <ul class="bm-ft-legal">
-        <li><a href="/polityka-prywatnosci">Polityka prywatności</a></li>
-        <li><a href="/regulamin">Regulamin</a></li>
-        <li><a href="/cookies">Cookies</a></li>
-      </ul>
-    </div>
-  </div>
+  <div id="bm-footer-slot"></div>
 </div>
 
 <!-- ═══════════ COOKIE BANNER — EU 2026 ═══════════ -->
