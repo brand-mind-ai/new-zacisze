@@ -5,6 +5,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Zacisze Turawa — Hotel Wellness nad Jeziorem</title>
+<link rel="icon" type="image/svg+xml" href="/zacisze-favicon.svg"/>
+<link rel="apple-touch-icon" href="/zacisze-favicon.svg"/>
+<meta name="theme-color" content="#231C1A"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Zacisze Turawa"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
 <style>
@@ -662,9 +670,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 
 /* ═══ CUSTOM CALENDAR ═══ */
 .hdw-cal {
-  position:absolute;
-  top:calc(100% + 8px);
-  left:0; right:0;
+  position:fixed; /* fixed so hero overflow:hidden doesn't clip it */
   z-index:600;
   background:rgba(13,10,7,.98);
   border:1px solid rgba(205,192,177,.18);
@@ -675,6 +681,8 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
   flex-direction:column;
   box-shadow:0 12px 48px rgba(0,0,0,.55);
   animation:hdwCalIn .22s ease;
+  max-height:80vh;
+  overflow-y:auto;
 }
 .hdw-cal.is-open { display:flex; }
 @keyframes hdwCalIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
@@ -773,15 +781,13 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 
 /* ═══ GUEST DROPDOWN ═══ */
 .hdw-guest-dropdown {
-  position:absolute;
-  top:calc(100% + 8px);
-  right:0;
+  position:fixed; /* fixed so hero overflow:hidden doesn't clip it */
   z-index:601;
   background:rgba(13,10,7,.98);
   border:1px solid rgba(205,192,177,.18);
   backdrop-filter:blur(28px);
   -webkit-backdrop-filter:blur(28px);
-  min-width:clamp(110px,18%,160px);
+  min-width:160px;
   display:none;
   flex-direction:column;
   box-shadow:0 10px 40px rgba(0,0,0,.5);
@@ -836,9 +842,19 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 nav.solid .nav-cta.btn-rezerwuj { background:var(--bark); color:var(--parchment) !important; border-color:var(--bark); }
 nav.solid .nav-cta.btn-rezerwuj:hover { background:var(--parchment); color:var(--bark) !important; }
 nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-color:rgba(60,49,33,.9); backdrop-filter:blur(4px); }
-/* room-bar adjustment — espresso bg so bark button contrasts */
+/* room-bar adjustment — inverted: parchment bg, bark text */
 .room-bar { background:var(--espresso) !important; display:flex; align-items:center; justify-content:center; }
-.room-bar-link.btn-rezerwuj { width:100%; justify-content:center; padding:13px 20px; }
+.room-bar-link.btn-rezerwuj {
+  width:100%; justify-content:center; padding:13px 20px;
+  background:var(--parchment) !important;
+  color:var(--bark) !important;
+  border-color:var(--parchment) !important;
+}
+.room-bar-link.btn-rezerwuj:hover {
+  background:var(--bark) !important;
+  color:var(--parchment) !important;
+  border-color:var(--bark) !important;
+}
 /* mob-cta override */
 .mob-cta.btn-rezerwuj { font-size:17px !important; opacity:1 !important; }
 
@@ -892,6 +908,20 @@ nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-co
 .bm-close:hover svg { transform:rotate(90deg); }
 .bm-iframe-wrap { flex:1; min-height:0; overflow:hidden; position:relative; }
 .book-iframe { width:100%; height:100%; border:none; display:block; background:var(--off); }
+/* Lottie loading overlay */
+.bm-loader {
+  position:absolute; inset:0; z-index:2;
+  background:var(--ink);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;
+  transition:opacity .4s ease;
+}
+.bm-loader.hidden { opacity:0; pointer-events:none; }
+.bm-lottie-wrap { width:200px; height:80px; }
+.bm-loader-text {
+  font-family:'DM Sans',sans-serif; font-size:11px;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--sand); opacity:.4; margin:0;
+}
 .bm-footer {
   background:var(--espresso); padding:12px var(--g); flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
@@ -1657,12 +1687,40 @@ window.addEventListener('scroll', () => {
     }
   }
 
+  // Position a fixed-position popup below (or above) a reference element
+  function positionPopup(popup, refEl) {
+    if (!popup || !refEl) return;
+    var r = refEl.getBoundingClientRect();
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var popW = Math.min(r.width > 0 ? Math.max(r.width, 300) : 320, vw - 16);
+    popup.style.width = popW + 'px';
+    // horizontal: align left edge of widget, clamp to viewport
+    var left = Math.min(r.left, vw - popW - 8);
+    popup.style.left = Math.max(8, left) + 'px';
+    popup.style.right = 'auto';
+    // vertical: prefer below, fallback above
+    var spaceBelow = vh - r.bottom - 12;
+    var spaceAbove = r.top - 12;
+    if (spaceBelow >= 240 || spaceBelow >= spaceAbove) {
+      popup.style.top = (r.bottom + 8) + 'px';
+      popup.style.bottom = 'auto';
+    } else {
+      popup.style.bottom = (vh - r.top + 8) + 'px';
+      popup.style.top = 'auto';
+    }
+  }
+
   function openCal(mode){
     calMode=mode;
     calYear=(mode==='in'?cin:cout).getFullYear();
     calMonth=(mode==='in'?cin:cout).getMonth();
     renderCal();
-    if(cal){cal.classList.add('is-open');cal.setAttribute('aria-hidden','false');}
+    if(cal){
+      cal.classList.add('is-open');
+      cal.setAttribute('aria-hidden','false');
+      // Position below the widget (use ciBtn as anchor)
+      positionPopup(cal, document.querySelector('.hero-date-widget'));
+    }
     closeGuestDrop();
   }
   function closeCal(){
@@ -1670,7 +1728,11 @@ window.addEventListener('scroll', () => {
     calMode=null;
   }
   function openGuestDrop(){
-    if(gDrop){gDrop.classList.add('is-open');gDrop.setAttribute('aria-hidden','false');}
+    if(gDrop && gCtrl){
+      gDrop.classList.add('is-open');
+      gDrop.setAttribute('aria-hidden','false');
+      positionPopup(gDrop, gCtrl);
+    }
     if(gCtrl) gCtrl.classList.add('gd-open');
     closeCal();
   }
@@ -1731,6 +1793,10 @@ var BE_BASE = 'https://be.guestsage.com/pl/0bf0dc4c-089f-42f4-8bf0-3ea22a76ad8a'
 var bookModal = null;
 var bookIframe = null;
 var _modalOpen = false;
+var _lottieAnim = null;
+
+// Lottie animation data (5-dot pulse, hotel brand colours)
+var LOADING_ANIM_DATA = {"assets":[],"layers":[{"ddd":0,"ind":0,"ty":4,"nm":"dot5","ks":{"o":{"k":[{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":8,"s":[100],"e":[30]},{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":24,"s":[30],"e":[100]},{"t":40}]},"r":{"k":0},"p":{"k":[187.875,77.125,0]},"a":{"k":[-76.375,-2.875,0]},"s":{"k":[{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":8,"s":[100,100,100],"e":[200,200,100]},{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":24,"s":[200,200,100],"e":[100,100,100]},{"t":40}]}},"ao":0,"shapes":[{"ty":"gr","it":[{"d":1,"ty":"el","s":{"k":[18,18]},"p":{"k":[0,0]}},{"ty":"fl","c":{"k":[0.7765,0.6392,0.5137,1]},"o":{"k":100}},{"ty":"tr","p":{"k":[-76.482,-3.482],"ix":2},"a":{"k":[0,0],"ix":1},"s":{"k":[100,100],"ix":3},"r":{"k":0,"ix":6},"o":{"k":100,"ix":7}}]}],"ip":0,"op":40,"st":0,"bm":0,"sr":1},{"ddd":0,"ind":1,"ty":4,"nm":"dot4","ks":{"o":{"k":[{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":6,"s":[100],"e":[30]},{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":22,"s":[30],"e":[100]},{"t":36}]},"r":{"k":0},"p":{"k":[162.125,76.625,0]},"a":{"k":[-76.375,-2.875,0]},"s":{"k":[{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":6,"s":[100,100,100],"e":[200,200,100]},{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":22,"s":[200,200,100],"e":[100,100,100]},{"t":36}]}},"ao":0,"shapes":[{"ty":"gr","it":[{"d":1,"ty":"el","s":{"k":[18,18]},"p":{"k":[0,0]}},{"ty":"fl","c":{"k":[0.8863,0.7608,0.6392,1]},"o":{"k":100}},{"ty":"tr","p":{"k":[-76.482,-3.482],"ix":2},"a":{"k":[0,0],"ix":1},"s":{"k":[100,100],"ix":3},"r":{"k":0,"ix":6},"o":{"k":100,"ix":7}}]}],"ip":0,"op":40,"st":0,"bm":0,"sr":1},{"ddd":0,"ind":2,"ty":4,"nm":"dot3","ks":{"o":{"k":[{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":4,"s":[100],"e":[30]},{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":20,"s":[30],"e":[100]},{"t":32}]},"r":{"k":0},"p":{"k":[135.625,76.625,0]},"a":{"k":[-76.375,-2.875,0]},"s":{"k":[{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":4,"s":[100,100,100],"e":[200,200,100]},{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":20,"s":[200,200,100],"e":[100,100,100]},{"t":32}]}},"ao":0,"shapes":[{"ty":"gr","it":[{"d":1,"ty":"el","s":{"k":[18,18]},"p":{"k":[0,0]}},{"ty":"fl","c":{"k":[0.6063,0.4655,0.3337,1]},"o":{"k":100}},{"ty":"tr","p":{"k":[-76.482,-3.482],"ix":2},"a":{"k":[0,0],"ix":1},"s":{"k":[100,100],"ix":3},"r":{"k":0,"ix":6},"o":{"k":100,"ix":7}}]}],"ip":0,"op":40,"st":0,"bm":0,"sr":1},{"ddd":0,"ind":3,"ty":4,"nm":"dot2","ks":{"o":{"k":[{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":2,"s":[100],"e":[30]},{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":16,"s":[30],"e":[100]},{"t":28}]},"r":{"k":0},"p":{"k":[109.375,76.625,0]},"a":{"k":[-76.625,-3.125,0]},"s":{"k":[{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":2,"s":[100,100,100],"e":[200,200,100]},{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":16,"s":[200,200,100],"e":[100,100,100]},{"t":28}]}},"ao":0,"shapes":[{"ty":"gr","it":[{"d":1,"ty":"el","s":{"k":[18,18]},"p":{"k":[0,0]}},{"ty":"fl","c":{"k":[0.8908,0.72,0.5492,1]},"o":{"k":100}},{"ty":"tr","p":{"k":[-76.482,-3.482],"ix":2},"a":{"k":[0,0],"ix":1},"s":{"k":[100,100],"ix":3},"r":{"k":0,"ix":6},"o":{"k":100,"ix":7}}]}],"ip":0,"op":40,"st":0,"bm":0,"sr":1},{"ddd":0,"ind":4,"ty":4,"nm":"dot1","ks":{"o":{"k":[{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":0,"s":[100],"e":[30]},{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"n":["0p833_0p833_0p333_0"],"t":12,"s":[30],"e":[100]},{"t":24}]},"r":{"k":0},"p":{"k":[82.625,76.625,0]},"a":{"k":[-76.625,-3.375,0]},"s":{"k":[{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":0,"s":[100,100,100],"e":[200,200,100]},{"i":{"x":[0.833,0.833,0.833],"y":[0.833,0.833,0.833]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0.333]},"n":["0p833_0p833_0p333_0","0p833_0p833_0p333_0","0p833_0p833_0p333_0p333"],"t":12,"s":[200,200,100],"e":[100,100,100]},{"t":24}]}},"ao":0,"shapes":[{"ty":"gr","it":[{"d":1,"ty":"el","s":{"k":[18,18]},"p":{"k":[0,0]}},{"ty":"fl","c":{"k":[0.78,0.5527,0.34,1]},"o":{"k":100}},{"ty":"tr","p":{"k":[-76.482,-3.482],"ix":2},"a":{"k":[0,0],"ix":1},"s":{"k":[100,100],"ix":3},"r":{"k":0,"ix":6},"o":{"k":100,"ix":7}}]}],"ip":0,"op":40,"st":0,"bm":0,"sr":1}],"v":"4.5.4","ddd":0,"ip":0,"op":40,"fr":24,"w":280,"h":160};
 
 function buildBeUrl(arrivalDate, departureDate, personsCount) {
   var url = BE_BASE;
@@ -1771,10 +1837,39 @@ function updateFooterReveal() {
 }
 window.addEventListener('scroll', function(){ if (_modalOpen) updateFooterReveal(); }, {passive:true});
 
+function showLoader() {
+  var loader = document.getElementById('bm-loader');
+  if (!loader) return;
+  loader.classList.remove('hidden');
+  initLottieIfNeeded();
+  if (_lottieAnim) _lottieAnim.play();
+}
+
+function hideLoader() {
+  var loader = document.getElementById('bm-loader');
+  if (!loader) return;
+  loader.classList.add('hidden');
+  if (_lottieAnim) _lottieAnim.pause();
+}
+
+function initLottieIfNeeded() {
+  if (_lottieAnim) return;
+  var wrap = document.getElementById('bm-lottie');
+  if (!wrap || typeof lottie === 'undefined') return;
+  _lottieAnim = lottie.loadAnimation({
+    container: wrap,
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    animationData: LOADING_ANIM_DATA
+  });
+}
+
 function openBookModal(arrivalDate, departureDate, personsCount) {
   if (!bookModal) bookModal = document.getElementById('book-modal');
   if (!bookIframe) bookIframe = document.getElementById('book-iframe');
   if (!bookModal || !bookIframe) return;
+  showLoader();
   bookIframe.src = buildBeUrl(arrivalDate, departureDate, personsCount);
   bookModal.classList.add('is-open');
   document.body.classList.add('bm-open');
@@ -1802,8 +1897,11 @@ document.addEventListener('DOMContentLoaded', function() {
   bookIframe = document.getElementById('book-iframe');
   var bmClose = document.getElementById('bm-close');
   if (bmClose) bmClose.addEventListener('click', closeBookModal);
+  if (bookIframe) bookIframe.addEventListener('load', function() {
+    // Don't hide loader on about:blank — only on real BE URL
+    if (bookIframe.src && bookIframe.src !== 'about:blank') hideLoader();
+  });
   if (window.location.pathname === '/rezerwuj') history.replaceState(null, '', '/');
-
 });
 
 document.addEventListener('keydown', function(e){ if (e.key==='Escape' && _modalOpen) closeBookModal(); });
@@ -1881,6 +1979,10 @@ document.addEventListener('DOMContentLoaded', function(){
     <span></span><span></span><span></span>
   </button>
   <div class="bm-iframe-wrap">
+    <div class="bm-loader" id="bm-loader">
+      <div class="bm-lottie-wrap" id="bm-lottie"></div>
+      <p class="bm-loader-text">Ładowanie rezerwacji…</p>
+    </div>
     <iframe id="book-iframe" class="book-iframe" src="about:blank"
       title="Rezerwacja online — Hotel Zacisze Turawa"
       frameborder="0" allow="payment *; fullscreen *"></iframe>
