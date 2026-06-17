@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -1047,11 +1048,13 @@ nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-co
   .nav-burger:hover { background: transparent !important; transform: none !important; }
   /* Hero padding for 54px sticky nav */
   .hero-content { padding-top: 90px !important; }
-  /* Hide nav bar when booking modal is open */
-  body.bm-open nav#nav {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
+}
+
+/* Hide nav on ALL screen sizes when booking modal is open */
+body.bm-open nav#nav {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity .25s ease !important;
 }
 
 /* ═══ V12: Modal — floating close button ═══ */
@@ -1092,102 +1095,6 @@ nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-co
   transition: opacity .28s ease, visibility 0s 0s !important;
 }
 
-/* ═══ V12: Modal full footer ═══ */
-.bm-footer-full {
-  background: var(--espresso);
-  color: var(--sand);
-  flex-shrink: 0;
-  border-top: 1px solid rgba(205,192,177,.12);
-  padding: 28px var(--g) 20px;
-}
-.bm-ft-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px 40px;
-  align-items: start;
-}
-.bm-ft-brand-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(16px,1.6vw,20px);
-  font-weight: 400;
-  letter-spacing: .1em;
-  color: var(--parchment);
-  margin: 0 0 6px;
-}
-.bm-ft-tagline {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  letter-spacing: .06em;
-  color: var(--sand);
-  opacity: .6;
-  margin: 0;
-  line-height: 1.5;
-}
-.bm-ft-col-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--sand);
-  opacity: .5;
-  margin: 0 0 10px;
-}
-.bm-ft-links {
-  list-style: none;
-  margin: 0; padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.bm-ft-links a {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--sand);
-  text-decoration: none;
-  opacity: .75;
-  transition: opacity .16s;
-}
-.bm-ft-links a:hover { opacity: 1; }
-.bm-ft-bottom {
-  max-width: var(--max);
-  margin: 20px auto 0;
-  padding-top: 16px;
-  border-top: 1px solid rgba(205,192,177,.1);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.bm-ft-copy {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  color: var(--sand);
-  opacity: .32;
-  letter-spacing: .04em;
-}
-.bm-ft-legal {
-  display: flex;
-  gap: 16px;
-  list-style: none;
-  margin: 0; padding: 0;
-}
-.bm-ft-legal a {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  color: var(--sand);
-  opacity: .45;
-  text-decoration: none;
-  transition: opacity .16s;
-  letter-spacing: .04em;
-}
-.bm-ft-legal a:hover { opacity: .8; }
-@media(max-width:600px) {
-  .bm-ft-inner { grid-template-columns: 1fr; gap: 20px; }
-  .bm-ft-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
-}
 
 </style>
 </head>
@@ -1854,22 +1761,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (bmClose) bmClose.addEventListener('click', closeBookModal);
   if (window.location.pathname === '/rezerwuj') history.replaceState(null, '', '/');
 
-  // ── Clone real footer into modal slot (fix SVG ID conflicts) ──
-  var realFooter = document.getElementById('contact');
-  var slot = document.getElementById('bm-footer-slot');
-  if (realFooter && slot) {
-    var html = realFooter.outerHTML;
-    // Rename clipPath/filter IDs so they don't clash with the original
-    html = html.replace(/\bid="ft_/g, 'id="bm_ft_');
-    html = html.replace(/url\(#ft_/g, 'url(#bm_ft_');
-    html = html.replace(/ id="contact"/g, ' id="bm-footer-clone"');
-    // Remove the nested book-modal-cta duplication guard (ft-mobile-cta stays)
-    slot.innerHTML = html;
-    // Re-bind the ZAREZERWUJ button inside the cloned footer
-    slot.querySelectorAll('.btn-rezerwuj').forEach(function(btn) {
-      btn.onclick = function(e) { e.preventDefault(); openBookModal(); };
-    });
-  }
 });
 
 document.addEventListener('keydown', function(e){ if (e.key==='Escape' && _modalOpen) closeBookModal(); });
@@ -1951,7 +1842,6 @@ window.addEventListener('popstate', function(e){
       title="Rezerwacja online — Hotel Zacisze Turawa"
       frameborder="0" allow="payment *; fullscreen *"></iframe>
   </div>
-  <div id="bm-footer-slot"></div>
 </div>
 
 <!-- ═══════════ COOKIE BANNER — EU 2026 ═══════════ -->
