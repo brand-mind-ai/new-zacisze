@@ -1027,6 +1027,8 @@ nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-co
   .hero-mobile-logo { display:block !important; }
   /* V14: No nav-height offset on hero */
   .hero-content { padding-top:0 !important; }
+  /* V14: Remove fadeUp animation on mobile — otherwise transform:matrix() breaks position:fixed for calendar */
+  .hero-date-widget { animation:none !important; }
   /* V14: Calendar = full-screen overlay on mobile */
   .hdw-cal {
     position:fixed !important; inset:0 !important;
@@ -1156,11 +1158,11 @@ body.bm-open nav#nav {
       <li><a href="#contact">Kontakt</a></li>
     </ul>
     <a class="nav-cta btn-rezerwuj" href="#" onclick="openBookModal();return false;">Zarezerwuj pobyt</a>
-    <button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
-    </button>
   </div>
 </nav>
+<button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+</button>
 <div class="nav-mobile" id="navMobile">
   <a href="#about">O hotelu</a><a href="#rooms">Pokoje</a>
   <a href="#features">Atrakcje</a><a href="#vouchers">Vouchery</a><a href="#contact">Kontakt</a>
@@ -1236,7 +1238,17 @@ body.bm-open nav#nav {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
           <!-- CALENDAR OVERLAY (appears above widget) -->
-          <div class="hdw-cal" id="hdw-cal" aria-hidden="true">
+          
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+</section>
+
+<div class="hdw-cal" id="hdw-cal" aria-hidden="true">
             <button class="hdw-cal-close" id="hdw-cal-close" type="button" aria-label="Zamknij">&#x2715;</button>
             <div class="hdw-cal-header">
               <button class="hdw-cal-nav" id="hdw-cal-prev" type="button" aria-label="Poprzedni">
@@ -1254,22 +1266,13 @@ body.bm-open nav#nav {
             <div class="hdw-cal-grid" id="hdw-cal-grid"></div>
           </div>
 
-          <!-- GUEST DROPDOWN (appears above widget, right-aligned) -->
-          <div class="hdw-guest-dropdown" id="hdw-guest-dropdown" aria-hidden="true">
+<div class="hdw-guest-dropdown" id="hdw-guest-dropdown" aria-hidden="true">
             <div class="hdw-guest-opt" data-val="1">1</div>
             <div class="hdw-guest-opt" data-val="2">2</div>
             <div class="hdw-guest-opt" data-val="3">3</div>
             <div class="hdw-guest-opt" data-val="4">4</div>
             <div class="hdw-guest-opt hdw-guest-more" data-val="wiecej">wi&#281;cej</div>
           </div>
-        </div>
-      </div>
-
-
-    </div>
-  </div>
-
-</section>
 
 <!-- ABOUT -->
 <section class="about" id="about">
@@ -1717,10 +1720,7 @@ window.addEventListener('scroll', () => {
       cal.classList.add('is-open');
       cal.setAttribute('aria-hidden','false');
       // Position below the widget (use ciBtn as anchor)
-      if (window.innerWidth > 900) {
-        positionPopup(cal, document.querySelector('.hero-date-widget'));
-      }
-      // Mobile: CSS positions calendar as full-screen overlay
+      positionPopup(cal, document.querySelector('.hero-date-widget'));
     }
     closeGuestDrop();
   }
@@ -2050,7 +2050,5 @@ document.addEventListener('DOMContentLoaded', function(){
       <button class="cb-btn-necessary" id="cb-accept-all-prefs">Akceptuj wszystkie</button>
     </div>
   </div>
-</div>
-
-</body>
+</div></body>
 </html>
