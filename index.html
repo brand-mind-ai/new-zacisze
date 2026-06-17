@@ -482,7 +482,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
   border:1px solid rgba(205,192,177,.14);
   backdrop-filter:blur(22px);
   -webkit-backdrop-filter:blur(22px);
-  padding:clamp(20px,2.5vw,32px);
+  padding:clamp(14px,1.8vw,22px);
   animation:fadeUp .9s .45s ease both;
   position:relative;
   overflow:visible;
@@ -492,7 +492,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 .hdw-label-row {
   display:flex;
   align-items:center;
-  margin-bottom:clamp(14px,2vw,20px);
+  margin-bottom:clamp(8px,1.2vw,14px);
 }
 .hdw-lbl {
   font-family:'DM Sans',sans-serif;
@@ -520,8 +520,8 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 .hdw-dates-row {
   display:flex;
   align-items:center;
-  margin-bottom:clamp(20px,2.5vw,30px);
-  padding-bottom:clamp(20px,2.5vw,30px);
+  margin-bottom:clamp(12px,1.6vw,20px);
+  padding-bottom:clamp(12px,1.6vw,20px);
   border-bottom:1px solid rgba(205,192,177,.12);
 }
 .hdw-date-col {
@@ -532,11 +532,11 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 .hdw-date-col:hover { opacity:.8; }
 .hdw-day {
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(52px,5.5vw,76px);
+  font-size:clamp(36px,3.8vw,54px);
   font-weight:300;
   color:var(--parchment);
   line-height:.95;
-  margin-bottom:6px;
+  margin-bottom:4px;
   transition:color .2s;
 }
 .hdw-date-col:hover .hdw-day { color:var(--sand); }
@@ -582,7 +582,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 }
 .hdw-guests-val {
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(36px,3.5vw,48px);
+  font-size:clamp(28px,2.8vw,40px);
   font-weight:300;
   color:var(--parchment);
   line-height:.95;
@@ -655,25 +655,25 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
   .hero-date-widget { max-width:100%; }
 }
 @media(max-width:560px){
-  .hdw-day { font-size:clamp(40px,12vw,60px); }
-  .hdw-guests-val { font-size:clamp(32px,10vw,44px); }
+  .hdw-day { font-size:clamp(32px,9vw,44px); }
+  .hdw-guests-val { font-size:clamp(24px,7vw,34px); }
 }
 
 
 /* ═══ CUSTOM CALENDAR ═══ */
 .hdw-cal {
   position:absolute;
-  bottom:calc(100% + 8px);
+  top:calc(100% + 8px);
   left:0; right:0;
-  z-index:200;
+  z-index:600;
   background:rgba(13,10,7,.98);
   border:1px solid rgba(205,192,177,.18);
   backdrop-filter:blur(28px);
   -webkit-backdrop-filter:blur(28px);
-  padding:clamp(16px,2vw,24px);
+  padding:clamp(12px,1.5vw,20px);
   display:none;
   flex-direction:column;
-  box-shadow:0 -12px 48px rgba(0,0,0,.55);
+  box-shadow:0 12px 48px rgba(0,0,0,.55);
   animation:hdwCalIn .22s ease;
 }
 .hdw-cal.is-open { display:flex; }
@@ -709,13 +709,13 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 
 .hdw-cal-hint {
   font-family:'DM Sans',sans-serif;
-  font-size:10px;
-  letter-spacing:.22em;
+  font-size:12px;
+  letter-spacing:.18em;
   text-transform:uppercase;
   color:var(--sand);
-  opacity:.38;
+  opacity:.45;
   text-align:center;
-  margin:8px 0 14px;
+  margin:8px 0 12px;
 }
 .hdw-cal-weekdays {
   display:grid;
@@ -724,18 +724,18 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 }
 .hdw-cal-weekdays span {
   font-family:'DM Sans',sans-serif;
-  font-size:9px;
-  letter-spacing:.14em;
+  font-size:11px;
+  letter-spacing:.1em;
   text-transform:uppercase;
   color:var(--sand);
-  opacity:.28;
+  opacity:.38;
   text-align:center;
-  padding:2px 0;
+  padding:4px 0;
 }
 .hdw-cal-grid {
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  gap:1px;
+  gap:2px;
 }
 .hdw-cal-day {
   aspect-ratio:1;
@@ -743,10 +743,10 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
   align-items:center;
   justify-content:center;
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(10px,1.1vw,13px);
+  font-size:clamp(13px,1.3vw,16px);
   font-weight:300;
   color:var(--sand);
-  opacity:.6;
+  opacity:.65;
   cursor:pointer;
   transition:background .14s, color .14s, opacity .14s;
   position:relative;
@@ -774,9 +774,9 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
 /* ═══ GUEST DROPDOWN ═══ */
 .hdw-guest-dropdown {
   position:absolute;
-  bottom:calc(100% + 8px);
+  top:calc(100% + 8px);
   right:0;
-  z-index:201;
+  z-index:601;
   background:rgba(13,10,7,.98);
   border:1px solid rgba(205,192,177,.18);
   backdrop-filter:blur(28px);
@@ -784,7 +784,7 @@ footer { background:var(--espresso); padding-top:clamp(60px,7vw,80px); padding-b
   min-width:clamp(110px,18%,160px);
   display:none;
   flex-direction:column;
-  box-shadow:0 -10px 40px rgba(0,0,0,.5);
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
   animation:hdwCalIn .2s ease;
 }
 .hdw-guest-dropdown.is-open { display:flex; }
@@ -1050,6 +1050,17 @@ nav:not(.solid) .nav-cta.btn-rezerwuj { background:rgba(60,49,33,.75); border-co
   .hero-content { padding-top: 90px !important; }
 }
 
+/* Footer parallax — fixed behind modal, revealed on scroll */
+body.bm-open footer#contact {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9001 !important;
+  will-change: transform;
+  margin: 0 !important;
+}
+
 /* Hide nav on ALL screen sizes when booking modal is open */
 body.bm-open nav#nav {
   opacity: 0 !important;
@@ -1057,28 +1068,35 @@ body.bm-open nav#nav {
   transition: opacity .25s ease !important;
 }
 
-/* ═══ V12: Modal — floating close button ═══ */
+/* ═══ V12: Modal — hamburger menu button ═══ */
 .bm-close-float {
   position: fixed;
-  top: 16px;
+  top: 72px; /* below GuestSage language/currency selector */
   right: 16px;
   z-index: 9010;
-  width: 48px; height: 48px;
-  background: var(--bark);
-  border: none;
-  border-radius: 50%;
+  width: 44px; height: 44px;
+  background: rgba(38,28,18,.88);
+  border: 1px solid rgba(205,192,177,.22);
+  border-radius: 6px;
   color: var(--parchment);
-  font-size: 20px;
-  line-height: 1;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,0,0,.35), 0 0 0 1px rgba(60,49,33,.4);
-  transition: background .2s, transform .2s, box-shadow .2s;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  transition: background .2s, border-color .2s, box-shadow .2s;
 }
 .bm-close-float:hover {
-  background: var(--espresso);
-  transform: scale(1.08);
-  box-shadow: 0 6px 28px rgba(0,0,0,.45), 0 0 0 1px rgba(60,49,33,.55);
+  background: rgba(60,49,33,.95);
+  border-color: rgba(205,192,177,.4);
+  box-shadow: 0 6px 28px rgba(0,0,0,.5);
+}
+.bm-close-float span {
+  display: block;
+  width: 20px; height: 1.5px;
+  background: var(--parchment);
+  border-radius: 1px;
+  transition: background .2s;
 }
 
 /* ═══ V12: Modal — use visibility approach (no rAF needed) ═══ */
@@ -1613,7 +1631,8 @@ window.addEventListener('scroll', () => {
       if(ds===coutS) el.classList.add('selected-out');
       if(dt>cin&&dt<cout) el.classList.add('in-range');
       ;(function(dateCopy){
-        el.addEventListener('click',function(){
+        el.addEventListener('click',function(e){
+          e.stopPropagation();
           if(dateCopy<today) return;
           if(calMode==='in'){
             cin=dateCopy;
@@ -1718,15 +1737,39 @@ function buildBeUrl(arrivalDate, departureDate, personsCount) {
   if (arrivalDate && departureDate) {
     url += '/offers?arrivalDate=' + arrivalDate + '&departureDate=' + departureDate + '&personsCount=' + (personsCount||2);
   }
-  var consent = getConsent();
   var sep = url.indexOf('?') > -1 ? '&' : '?';
-  if (consent && consent.analytics && consent.marketing) {
-    url += sep + 'cookiesAccepted=all&gdprConsent=1&disableGoogleSSO=1';
-  } else {
-    url += sep + 'cookiesAccepted=necessary&disableGoogleSSO=1';
-  }
+  // Always pass accepted=all so GuestSage doesn't show its own cookie banner
+  // (our site-level cookie banner covers consent for embedded third-party tools)
+  url += sep + 'cookiesAccepted=all&gdprConsent=1&disableGoogleSSO=1';
   return url;
 }
+
+// ── Footer parallax helpers ──
+function enableFooterReveal() {
+  var footer = document.getElementById('contact');
+  if (!footer) return;
+  var footerH = footer.offsetHeight || 420;
+  document.body.style.paddingBottom = footerH + 'px';
+  footer.style.transform = 'translateY(100%)';
+  updateFooterReveal();
+}
+function disableFooterReveal() {
+  var footer = document.getElementById('contact');
+  document.body.style.paddingBottom = '';
+  if (footer) footer.style.transform = '';
+  window.scrollTo({top:0, behavior:'instant'});
+}
+function updateFooterReveal() {
+  if (!_modalOpen) return;
+  var footer = document.getElementById('contact');
+  if (!footer) return;
+  var scrolled = window.scrollY;
+  var maxScroll = document.body.scrollHeight - window.innerHeight;
+  if (maxScroll <= 0) { footer.style.transform = 'translateY(100%)'; return; }
+  var progress = Math.min(1, scrolled / maxScroll);
+  footer.style.transform = 'translateY(' + Math.round((1 - progress) * 100) + '%)';
+}
+window.addEventListener('scroll', function(){ if (_modalOpen) updateFooterReveal(); }, {passive:true});
 
 function openBookModal(arrivalDate, departureDate, personsCount) {
   if (!bookModal) bookModal = document.getElementById('book-modal');
@@ -1736,8 +1779,8 @@ function openBookModal(arrivalDate, departureDate, personsCount) {
   bookModal.classList.add('is-open');
   document.body.classList.add('bm-open');
   history.pushState({booking:true}, 'Rezerwacja — Zacisze Turawa', '/rezerwuj');
-  document.body.style.overflow = 'hidden';
   _modalOpen = true;
+  enableFooterReveal();
 }
 
 function closeBookModal() {
@@ -1746,8 +1789,8 @@ function closeBookModal() {
   if (!bookModal || !_modalOpen) return;
   bookModal.classList.remove('is-open');
   document.body.classList.remove('bm-open');
-  document.body.style.overflow = '';
   _modalOpen = false;
+  disableFooterReveal();
   setTimeout(function(){
     if (!_modalOpen && bookIframe) { bookIframe.src = 'about:blank'; }
   }, 300);
@@ -1769,8 +1812,8 @@ window.addEventListener('popstate', function(e){
     if (!bookModal) bookModal = document.getElementById('book-modal');
     if (bookModal) bookModal.classList.remove('is-open');
     document.body.classList.remove('bm-open');
-    document.body.style.overflow = '';
     _modalOpen = false;
+    disableFooterReveal();
     setTimeout(function(){
       if (!_modalOpen && bookIframe) { bookIframe.src = 'about:blank'; }
     }, 300);
@@ -1778,7 +1821,7 @@ window.addEventListener('popstate', function(e){
 });
 
 // ─── COOKIE BANNER ───
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
   var banner = document.getElementById('cookie-banner');
   var prefsOverlay = document.getElementById('cb-prefs-overlay');
   var cbAcceptAll = document.getElementById('cb-accept-all');
@@ -1827,15 +1870,15 @@ window.addEventListener('popstate', function(e){
   });
   if (prefsOverlay) prefsOverlay.addEventListener('click', function(e){ if(e.target===prefsOverlay) closePrefs(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && prefsOverlay && prefsOverlay.classList.contains('is-open')) closePrefs(); });
-})();
+});
 
 
 </script>
 
 <!-- ═══════════ BOOKING MODAL ═══════════ -->
 <div id="book-modal" class="book-modal" role="dialog" aria-modal="true" aria-label="Rezerwacja online">
-  <button class="bm-close-float" id="bm-close" aria-label="Zamknij rezerwację" title="Zamknij (Esc)">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  <button class="bm-close-float" id="bm-close" aria-label="Zamknij rezerwację" title="Zamknij rezerwację (Esc)">
+    <span></span><span></span><span></span>
   </button>
   <div class="bm-iframe-wrap">
     <iframe id="book-iframe" class="book-iframe" src="about:blank"
